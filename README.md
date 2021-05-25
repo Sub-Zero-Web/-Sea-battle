@@ -1,0 +1,2 @@
+http://cleanjs.ru/articles/igra-morskoj-boj-na-chistom-javascript-rasstanovka-korablej.html
+https://sites.google.com/site/raznyeurokipoinformatiki/home/proekty/proekt-morskoj-boj/ustanovka-korablej/ustanovka-korablej
