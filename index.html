@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>React.js</title>
+    <title>Морской бой</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="libraries/react.development.js"></script>
@@ -14,7 +14,7 @@
 
         body {
             background-color: #000;
-            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoiskvsptZAwrkehHW4iGz4Qycj6_Mbkcbuw&usqp=CAU");
+            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoiskvsptZAwrkehHW4iGz4Qycj6_Mbkcbuw&usqp=CAU")
             /*background-repeat: no-repeat;
             background-size: 100%;*/
 
@@ -31,36 +31,36 @@
             color: #000000;
         }
         #fieldPlayer{
-            background: #000000;
+            background: #0000ff;
             position: relative;
-            top: -240px;
-            left: 368px;
+            top: -223px;
+            left: 225px;
         }
         #fieldComputer{
-            background: #000000;
+            background: #0000ff;
             position: relative;
-            top: -667px;
+            top: -850px;
             left: -662px;
         }
         #Player{
             position: relative;
-            top: -1155px;
-            left: 430px;
-            background-image:url("https://rjunimagu.net/wp-content/uploads/2015/03/a_ti_smechnoy-300x300.jpeg");
+            top: -1530px;
+            left: 385px;
+            background-size:100% 100%;
         }
         #Computer{
             position: relative;
-            top: -1170px;
-            left: -550px;
-            background-image:url("https://cs8.pikabu.ru/images/previews_comm/2016-05_1/14624426161192253.jpg");
+            top: -1545px;
+            left: -440px;
+            background-size:100% 100%;
         }
 
         tr {
             background-color: #ffffff;
         }
 
-        .empty{
-
+        #empty{
+            background-color: #ffffff
         }
         .Ship{
 
@@ -74,41 +74,38 @@
     </style>
     <script type="text/babel">
 
+        const EMPTY = 0;
+        const SHIP = 1;
+        const HIT = 2;
+        const KILLED = 3;
+        function getEmptyField() {
+            const result = [];
+            for (let i=0;i<10;i++){
+                result[i]=[];
+                for (let j=0;j<10;j++){
+                    result[i][j] = EMPTY;
+                }
+            }
+            return result;
+        }
+
+        function autoShipPlace(){
+
+        }
+
 
         function App() {
 
-            const fieldPlayer=[
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10]
-            ];
-            const fieldComputer=[
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10],
-                [1,2,3,4,5,6,7,8,9,10]
-            ];
+            const fieldPlayer=getEmptyField();
+            const fieldComputer=getEmptyField();
             return <>
-                <table id="fieldPlayer" cellspacing="5" cellpadding="10" border="1" width="100%">
+                <table id="fieldPlayer" cellSpacing="5" cellPadding="20" border="1" width="100%">
                     {fieldPlayer.map(row =>
                     <tr>{row.map(cell => <td>{cell}</td>)}
                     </tr>
                     )}
                 </table>
-                <table id="fieldComputer" cellSpacing="5" cellPadding="10" border="1" width="100%">
+                <table id="fieldComputer" cellSpacing="5" cellPadding="20" border="1" width="100%">
                     {fieldComputer.map(row =>
                         <tr>{row.map(cell => <td>{cell}</td>)}
                         </tr>
