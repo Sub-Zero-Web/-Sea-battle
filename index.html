@@ -15,60 +15,66 @@
         body {
             background-color: #000;
             background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoiskvsptZAwrkehHW4iGz4Qycj6_Mbkcbuw&usqp=CAU")
-            /*background-repeat: no-repeat;
-            background-size: 100%;*/
-
         }
+
         #wrapper {
             padding: 400px;
             text-align: right;
             line-height: 15px;
             font-size: 45px;
         }
+
         #root {
             width: 250px;
             margin: auto;
             color: #000000;
         }
-        #fieldPlayer{
+
+        #fieldPlayer {
             background: #0000ff;
             position: relative;
             top: -223px;
             left: 225px;
         }
-        #fieldComputer{
+
+        #fieldComputer {
             background: #0000ff;
             position: relative;
             top: -850px;
             left: -662px;
         }
-        #Player{
+
+        #Player {
             position: relative;
             top: -1530px;
             left: 385px;
-            background-size:100% 100%;
+            background-size: 100% 100%;
         }
-        #Computer{
+
+        #Computer {
             position: relative;
             top: -1545px;
             left: -440px;
-            background-size:100% 100%;
+            background-size: 100% 100%;
         }
 
         tr {
             background-color: #ffffff;
         }
 
-        #empty{
+        #empty {
             background-color: #ffffff
         }
-        .Ship{
+
+        .Ship {
 
         }
-        .hit{
+
+        .hit {
 
         }
-        .killed{
+
+        .killed {
 
         }
     </style>
@@ -78,31 +84,80 @@
         const SHIP = 1;
         const HIT = 2;
         const KILLED = 3;
+
+        const HORIZONTAL = 1;
+        const VERTICAL = 0;
+
+        function canTheShipBePlaced(field, x, y, orientation, length) {
+            let result = true;
+            for(let i=-1; i===length; i++){
+                if (orientation === HORIZONTAL){
+                    if (field[x+i][y] !== EMPTY
+                        || field[x+i][y+1] !== EMPTY
+                        || field[x+i][y-1] !== EMPTY) {
+                        result = false;
+                        break;
+                    }
+                } else {
+                    if (field[x][y+i] !== EMPTY
+                        || field[x+1][y+i] !== EMPTY
+                        || field[x-1][y+i] !== EMPTY) {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        function saveTheShipInTheMatrix(field, x, y, orientation, length){
+
+        }
+
         function getEmptyField() {
             const result = [];
-            for (let i=0;i<10;i++){
-                result[i]=[];
-                for (let j=0;j<10;j++){
+            for (let i = 0; i < 10; i++) {
+                result[i] = [];
+                for (let j = 0; j < 10; j++) {
                     result[i][j] = EMPTY;
                 }
             }
             return result;
         }
 
-        function autoShipPlace(){
+        function autoShipPlace() {
+            const field = getEmptyField();
 
+            const lengthsOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+
+            for (let length of lengthsOfShips) {
+                let orientation;
+                if (Math.random() > 0.5) {
+                    orientation = HORIZONTAL;
+                } else {
+                    orientation = VERTICAL;
+                }
+                let x,y;
+                do {
+                    x = Math.floor(Math.random() * 10);
+                    y = Math.floor(Math.random() * 10);
+                } while (canTheShipBePlaced(field, x, y, orientation,length));/*корабль можно так разместить*/
+
+                 (saveTheShipInTheMatrix(field, x, y, orientation, length));/*сохраняем корабль в матрице*/
+            }
         }
 
 
         function App() {
 
-            const fieldPlayer=getEmptyField();
-            const fieldComputer=getEmptyField();
+            const fieldPlayer = getEmptyField();
+            const fieldComputer = getEmptyField();
             return <>
                 <table id="fieldPlayer" cellSpacing="5" cellPadding="20" border="1" width="100%">
                     {fieldPlayer.map(row =>
-                    <tr>{row.map(cell => <td>{cell}</td>)}
-                    </tr>
+                        <tr>{row.map(cell => <td>{cell}</td>)}
+                        </tr>
                     )}
                 </table>
                 <table id="fieldComputer" cellSpacing="5" cellPadding="20" border="1" width="100%">
@@ -121,9 +176,9 @@
         }
 
 
-
         ReactDOM.render(<App/>, document.getElementById('root'));
-    </script>;
+    </script>
+    ;
 
 </head>
 <body>
