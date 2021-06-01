@@ -66,8 +66,8 @@
             background-color: #ffffff
         }
 
-        .Ship {
-
+        .ship {
+            background-color: blue;
         }
 
         .hit {
@@ -87,82 +87,113 @@
 
         const HORIZONTAL = 1;
         const VERTICAL = 0;
-
-        function canTheShipBePlaced(field, x, y, orientation, length) {
-            let result = true;
-            for(let i=-1; i===length; i++){
-                if (orientation === HORIZONTAL){
-                    if (field[x+i][y] !== EMPTY
-                        || field[x+i][y+1] !== EMPTY
-                        || field[x+i][y-1] !== EMPTY) {
-                        result = false;
-                        break;
-                    }
-                } else {
-                    if (field[x][y+i] !== EMPTY
-                        || field[x+1][y+i] !== EMPTY
-                        || field[x-1][y+i] !== EMPTY) {
-                        result = false;
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        function saveTheShipInTheMatrix(field, x, y, orientation, length){
-
-        }
-
-        function getEmptyField() {
-            const result = [];
-            for (let i = 0; i < 10; i++) {
-                result[i] = [];
-                for (let j = 0; j < 10; j++) {
-                    result[i][j] = EMPTY;
-                }
-            }
-            return result;
-        }
+        const FIELD_SIZE = 10;
 
         function autoShipPlace() {
-            const field = getEmptyField();
-
             const lengthsOfShips = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
 
-            for (let length of lengthsOfShips) {
+            let field = getEmptyField();
+
+            for (let i = 0; i < lengthsOfShips.length; i++) {
+                const length = lengthsOfShips[i];
                 let orientation;
                 if (Math.random() > 0.5) {
                     orientation = HORIZONTAL;
                 } else {
                     orientation = VERTICAL;
                 }
-                let x,y;
+                let x, y;
                 do {
-                    x = Math.floor(Math.random() * 10);
-                    y = Math.floor(Math.random() * 10);
-                } while (canTheShipBePlaced(field, x, y, orientation,length));/*корабль можно так разместить*/
-
-                 (saveTheShipInTheMatrix(field, x, y, orientation, length));/*сохраняем корабль в матрице*/
+                    x = Math.floor(Math.random() * FIELD_SIZE);
+                    y = Math.floor(Math.random() * FIELD_SIZE);
+                } while (!canTheShipBePlaced(field, x, y, orientation, length));/*корабль можно так разместить*/
+                field = saveTheShipInTheMatrix(field, x, y, orientation, length);/*сохраняем корабль в матрице*/
             }
+            return field;
+        }
+
+        function saveTheShipInTheMatrix(field, x, y, orientation, length) {
+            console.log('saveTheShipInTheMatrix', x, y, orientation, length);
+            for (let i = 0; i < length; i++) {
+                if (orientation === HORIZONTAL) {
+                    field[x + i][y] = SHIP;
+                } else {
+                    field[x][y + i] = SHIP;
+                }
+            }
+            return field;
+        }
+
+        function canTheShipBePlaced(field, x, y, orientation, length) {
+            for (let i = -1; i <= length; i++) {
+                if (orientation === HORIZONTAL) {
+                    if (i !== -1 && i !== length && !checkIfCanPutShip(field, x + i, y)) {
+                        return false;
+                    }
+                    if ((i === -1 || i === length) && !checkIfCellEmpty(field, x + i, y)) {
+                        return false;
+                    }
+                    if (!checkIfCellEmpty(field, x + i, y + 1) || !checkIfCellEmpty(field, x + i, y - 1)) {
+                        return false;
+                    }
+                } else {
+                    if (i !== -1 && i !== length && !checkIfCanPutShip(field, x, y + i)) {
+                        return false;
+                    }
+                    if ((i === -1 || i === length) && !checkIfCellEmpty(field, x, y + i)) {
+                        return false;
+                    }
+                    if (!checkIfCellEmpty(field, x + 1, y + i) || !checkIfCellEmpty(field, x - 1, y + i)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function checkIfCellEmpty(field, x, y) {
+            if (x < 0 || x >= FIELD_SIZE || y < 0 || y >= FIELD_SIZE) {
+                return true;
+            }
+            return field[x][y] === EMPTY;
+        }
+
+        function checkIfCanPutShip(field, x, y) {
+            if (x < 0 || x >= FIELD_SIZE || y < 0 || y >= FIELD_SIZE) {
+                return false;
+            }
+            return field[x][y] === EMPTY;
         }
 
 
-        function App() {
+        function getEmptyField() {
+            const result = [];
+            for (let i = 0; i < FIELD_SIZE; i++) {
+                result[i] = [];
+                for (let j = 0; j < FIELD_SIZE; j++) {
+                    result[i][j] = EMPTY;
+                }
+            }
+            return result;
+        }
 
-            const fieldPlayer = getEmptyField();
-            const fieldComputer = getEmptyField();
+
+        const fieldPlayer = autoShipPlace();
+        const fieldComputer = autoShipPlace();
+
+        function App() {
+            console.log('rerender');
+
             return <>
                 <table id="fieldPlayer" cellSpacing="5" cellPadding="20" border="1" width="100%">
                     {fieldPlayer.map(row =>
-                        <tr>{row.map(cell => <td>{cell}</td>)}
+                        <tr>{row.map(cell => <td className={cell === SHIP ? 'ship' : ''}>{cell}</td>)}
                         </tr>
                     )}
                 </table>
                 <table id="fieldComputer" cellSpacing="5" cellPadding="20" border="1" width="100%">
                     {fieldComputer.map(row =>
-                        <tr>{row.map(cell => <td>{cell}</td>)}
+                        <tr>{row.map(cell => <td className={cell === SHIP ? 'ship' : ''}>{cell}</td>)}
                         </tr>
                     )}
                 </table>
