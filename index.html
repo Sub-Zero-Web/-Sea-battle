@@ -56,14 +56,19 @@
             top: -1545px;
             left: -440px;
             background-size: 100% 100%;
+
         }
 
         tr {
             background-color: #ffffff;
         }
 
+        .cell {
+            min-width: 20px;
+        }
+
         #empty {
-            background-color: #ffffff
+            background-color: white;
         }
 
         .ship {
@@ -71,11 +76,11 @@
         }
 
         .hit {
-
+            background-color: red;
         }
 
         .killed {
-
+            background-color: black;
         }
     </style>
     <script type="text/babel">
@@ -176,13 +181,32 @@
             }
             return result;
         }
+        function CellComputer({cell, click}){
+            function getContent(){
+                if (cell === HIT)}  '.'
+                {if(cell === KILLED) && 'x'}
+                return <>&nbsp;</>;
+            }
 
+            return <td className="cell"
+                onClick={click}>
+                {getContent()}
 
-        const fieldPlayer = autoShipPlace();
-        const fieldComputer = autoShipPlace();
+            </td>
+        }
+
 
         function App() {
             console.log('rerender');
+            const [fieldPlayer, setFieldPlayer] = React.useState(autoShipPlace());
+            const [fieldComputer, setFieldComputer] = React.useState(autoShipPlace());
+
+
+            function click() {
+                console.log('работаю');
+            }
+
+
 
             return <>
                 <table id="fieldPlayer" cellSpacing="5" cellPadding="20" border="1" width="100%">
@@ -193,7 +217,9 @@
                 </table>
                 <table id="fieldComputer" cellSpacing="5" cellPadding="20" border="1" width="100%">
                     {fieldComputer.map(row =>
-                        <tr>{row.map(cell => <td className={cell === SHIP ? 'ship' : ''}>{cell}</td>)}
+                        <tr>{row.map(cell => (
+                            <CellComputer cell={cell} click={click}/>
+                        ))}
                         </tr>
                     )}
                 </table>
