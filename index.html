@@ -183,13 +183,13 @@
         }
         function CellComputer({cell, click}){
             function getContent(){
-                if (cell === HIT)}  '.'
-                {if(cell === KILLED) && 'x'}
+                if (cell === HIT) return '.';
+                if(cell === KILLED) return 'x'
                 return <>&nbsp;</>;
             }
 
-            return <td className="cell"
-                onClick={click}>
+            return <td className = "cell"
+                onClick = {click}>
                 {getContent()}
 
             </td>
@@ -202,8 +202,24 @@
             const [fieldComputer, setFieldComputer] = React.useState(autoShipPlace());
 
 
-            function click() {
-                console.log('работаю');
+            function click(x,y) {
+                const newFieldComputer = [...fieldComputer];
+                if (newFieldComputer[x][y]=== SHIP) {
+                    newFieldComputer[x][y] = KILLED;
+                } else {
+                    newFieldComputer[x][y] = HIT;
+                }
+                setFieldComputer(newFieldComputer);
+                const newFieldPlayer = [...fieldPlayer];
+
+                if (newFieldPlayer[z][c] === SHIP){
+                    newFieldPlayer[z][c] = KILLED;
+                } else{
+                    newFieldPlayer[z][c] = HIT;
+                }
+                setFieldPlayer(newFieldPlayer);
+                console.log('работаю',x,y);
+
             }
 
 
@@ -216,9 +232,9 @@
                     )}
                 </table>
                 <table id="fieldComputer" cellSpacing="5" cellPadding="20" border="1" width="100%">
-                    {fieldComputer.map(row =>
-                        <tr>{row.map(cell => (
-                            <CellComputer cell={cell} click={click}/>
+                    {fieldComputer.map((row, rowIndex) =>
+                        <tr>{row.map((cell, cellIndex) => (
+                            <CellComputer cell={cell} click={() => click(rowIndex,cellIndex)}/>
                         ))}
                         </tr>
                     )}
